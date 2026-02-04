@@ -507,73 +507,70 @@ export default function HomePage() {
                     </button>
                   </div>
 
-                  <div className="relative">
-                    <Slider {...carouselSettings}>
-                      {items.map((item, itemIndex) => (
-                        <div key={item._id} className="px-3">
-                          <div
-                            onClick={handleItemClick}
-                            className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-3 cursor-pointer overflow-hidden group"
-                          >
-                            {/* Image Container */}
-                            <div className="relative h-56 overflow-hidden bg-gray-200">
-                              <img
-                                src={item.imageUrl || getDefaultImage(category, itemIndex)}
-                                alt={item.name}
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                onError={(e) => {
-                                  e.target.src = getDefaultImage(category, itemIndex);
-                                }}
-                              />
-                              {/* Price Badge */}
-                              <div className="absolute top-4 right-4 bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                ₹{item.price.toFixed(0)}
-                              </div>
-                              {/* Veg Indicator */}
-                              {item.isVegetarian && (
-                                <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                                  🌱 Veg
-                                </div>
-                              )}
+                  {/* Responsive grid for food cards, like menu page */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {items.map((item, itemIndex) => (
+                      <div key={item._id}>
+                        <div
+                          onClick={handleItemClick}
+                          className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-3 cursor-pointer overflow-hidden group"
+                        >
+                          {/* Image Container */}
+                          <div className="relative h-56 overflow-hidden bg-gray-200">
+                            <img
+                              src={item.imageUrl || getDefaultImage(category, itemIndex)}
+                              alt={item.name}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                              onError={(e) => {
+                                e.target.src = getDefaultImage(category, itemIndex);
+                              }}
+                            />
+                            {/* Price Badge */}
+                            <div className="absolute top-4 right-4 bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                              ₹{item.price.toFixed(0)}
                             </div>
-
-                            {/* Content */}
-                            <div className="p-5">
-                              <h4 className="font-bold text-lg text-gray-900 mb-2 truncate group-hover:text-orange-600 transition-colors">
-                                {item.name}
-                              </h4>
-                              <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-10">
-                                {item.description}
-                              </p>
-                              
-                              {/* Rating and Time */}
-                              <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-1">
-                                  {item.rating && (
-                                    <>
-                                      <span className="text-yellow-400">⭐</span>
-                                      <span className="font-semibold text-gray-800">{item.rating}</span>
-                                    </>
-                                  )}
-                                </div>
-                                <span className="text-gray-500 text-sm">⏱️ 30-45 min</span>
+                            {/* Veg Indicator */}
+                            {item.isVegetarian && (
+                              <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                                🌱 Veg
                               </div>
+                            )}
+                          </div>
 
-                              {/* CTA Button */}
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleItemClick();
-                                }}
-                                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-105 shadow-md"
-                              >
-                                Add to Cart
-                              </button>
+                          {/* Content */}
+                          <div className="p-5">
+                            <h4 className="font-bold text-lg text-gray-900 mb-2 truncate group-hover:text-orange-600 transition-colors">
+                              {item.name}
+                            </h4>
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-10">
+                              {item.description}
+                            </p>
+                            {/* Rating and Time */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-1">
+                                {item.rating && (
+                                  <>
+                                    <span className="text-yellow-400">⭐</span>
+                                    <span className="font-semibold text-gray-800">{item.rating}</span>
+                                  </>
+                                )}
+                              </div>
+                              <span className="text-gray-500 text-sm">⏱️ 30-45 min</span>
                             </div>
+                            {/* CTA Button */}
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleItemClick();
+                              }}
+                              className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 rounded-xl transition-all transform hover:scale-105 shadow-md"
+                            >
+                              Add to Cart
+                            </button>
                           </div>
                         </div>
-                      ))}
-                    </Slider>
+                      </div>
+                    ))}
                   </div>
                 </div>
               );
