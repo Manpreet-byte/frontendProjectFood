@@ -191,7 +191,7 @@ const MenuItemModal = ({ item, onClose }) => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`w-24 h-24 md:w-16 md:h-16 rounded-lg overflow-hidden border-2 transition-all ${
                         index === currentImageIndex 
                           ? 'border-orange-500 scale-110' 
                           : 'border-white/50 hover:border-white'
@@ -202,7 +202,7 @@ const MenuItemModal = ({ item, onClose }) => {
                         alt={`Thumbnail ${index + 1}`} 
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/80x80?text=Food';
+                          e.target.src = 'https://via.placeholder.com/120x120?text=Food';
                         }}
                       />
                     </button>
