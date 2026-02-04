@@ -20,11 +20,7 @@ export default function Login() {
     try {
       const userData = await login(email, password);
       toast.success('Welcome back! 🎉');
-      if (userData.isAdmin) {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/customer-dashboard');
-      }
+      navigate('/');
     } catch {
       toast.error('Invalid email or password');
     } finally {
@@ -41,11 +37,7 @@ export default function Login() {
       try {
         const userData = await loginWithFirebaseIdToken(idToken);
         toast.success('Welcome back! 🎉');
-        if (userData.isAdmin) {
-          navigate('/admin-dashboard');
-        } else {
-          navigate('/customer-dashboard');
-        }
+        navigate('/');
       } catch (apiErr) {
         const errorMsg = apiErr.response?.data?.message || apiErr.message;
         console.error('Firebase API error:', errorMsg);

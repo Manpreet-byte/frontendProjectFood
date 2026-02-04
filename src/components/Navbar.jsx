@@ -336,7 +336,7 @@ export default function Navbar() {
                 {!user.isAdmin && (
                   <>
                     <Link 
-                      to="/customer-dashboard" 
+                      to="/menu" 
                       className="block text-gray-700 dark:text-gray-200 hover:text-orange-600 font-semibold py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -355,12 +355,12 @@ export default function Navbar() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       ⭐ Reviews
-                    <Link
-                      to="/restaurant"
-                      className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
-                    >
-                      Restaurant
                     </Link>
+                    <Link
+                      to="/checkout"
+                      className="block text-gray-700 dark:text-gray-200 hover:text-orange-600 font-semibold py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       🛒 Cart {cartItemCount > 0 && `(${cartItemCount})`}
                     </Link>
                     <Link 
