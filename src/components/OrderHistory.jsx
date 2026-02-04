@@ -47,7 +47,23 @@ export default function OrderHistory() {
     const fetchOrders = async () => {
       try {
         const userOrders = await dataService.getOrdersByUser(user?._id);
-        setOrders(userOrders);
+        // Resolve menu item details (orders store menuItem as id)
+        const allMenuItems = await dataService.getMenuItems();
+        const itemsMap = {};
+        allMenuItems.forEach(mi => { itemsMap[mi._id] = mi; });
+
+        const resolved = (userOrders || []).map((ord) => ({
+          ...ord,
+          items: (ord.items || []).map(({ menuItem, quantity }) => {
+            const resolvedItem = typeof menuItem === 'string' ? itemsMap[menuItem] : menuItem;
+            return {
+              menuItem: resolvedItem || { _id: (typeof menuItem === 'string' ? menuItem : (menuItem && menuItem._id) || 'unknown'), name: (resolvedItem && resolvedItem.name) || (menuItem && menuItem.name) || 'Item', price: (resolvedItem && resolvedItem.price) || (menuItem && menuItem.price) || 0, imageUrl: (resolvedItem && (resolvedItem.imageUrl || resolvedItem.image)) || null },
+              quantity: quantity || 1
+            };
+          })
+        }));
+
+        setOrders(resolved);
       } catch (err) {
         console.error(err);
       } finally {
@@ -115,8 +131,18 @@ export default function OrderHistory() {
             <p className="text-sm font-medium text-gray-700 mb-2">Items Ordered:</p>
             <ul className="space-y-1">
               {order.items.map(({ menuItem, quantity }) => (
-                <li key={menuItem._id} className="text-sm text-gray-700 flex justify-between">
-                  <span>{menuItem.name} <span className="text-gray-500">× {quantity}</span></span>
+                <li key={menuItem._id} className="text-sm text-gray-700 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={menuItem.imageUrl || menuItem.image || 'https://via.placeholder.com/64?text=🍽️'}
+                      alt={menuItem.name}
+                      className="w-12 h-12 object-cover rounded-md"
+                    />
+                    <div>
+                      <div>{menuItem.name} <span className="text-gray-500">× {quantity}</span></div>
+                      <div className="text-xs text-gray-500">₹{menuItem.price?.toFixed(2)}</div>
+                    </div>
+                  </div>
                   <span className="font-medium">${(menuItem.price * quantity).toFixed(2)}</span>
                 </li>
               ))}
