@@ -167,7 +167,7 @@ export default function Cart() {
           <h3 className="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h3>
           <p className="text-gray-500 mb-6">Looks like you haven't added anything yet</p>
           <button
-            onClick={() => navigate('/customer-dashboard')}
+            onClick={() => navigate('/menu')}
             className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-3 rounded-xl font-bold hover:shadow-lg transition-all transform hover:scale-105"
           >
             Browse Menu
@@ -515,7 +515,7 @@ export default function Cart() {
           </svg>
         </button>
         <button
-          onClick={() => navigate('/customer-dashboard')}
+          onClick={() => navigate('/menu')}
           className="w-full mt-2 text-orange-600 py-2 font-medium hover:text-orange-700 transition"
         >
           + Add More Items
