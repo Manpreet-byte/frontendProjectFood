@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { toast } from 'react-toastify';
 
 export default function Cart() {
@@ -44,24 +44,28 @@ export default function Cart() {
       
       setLoadingRecent(true);
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const res = await axios.get(`${apiUrl}/api/orders/my-orders`);
+        const orders = await dataService.getOrdersByUser(user._id);
         
-        if (!res.data || res.data.length === 0) {
+        if (!orders || orders.length === 0) {
           setRecentItems([]);
           setLoadingRecent(false);
           return;
         }
         
         // Extract unique menu items from recent orders (last 3 orders)
-        const recentOrders = res.data.slice(0, 3);
+        const recentOrders = orders.slice(0, 3);
         const itemsMap = new Map();
         
         recentOrders.forEach(order => {
           if (order.items && Array.isArray(order.items)) {
-            order.items.forEach(({ menuItem }) => {
-              if (menuItem && menuItem._id && !itemsMap.has(menuItem._id)) {
-                itemsMap.set(menuItem._id, menuItem);
+            order.items.forEach((item) => {
+              if (item && item.menuItem && !itemsMap.has(item.menuItem)) {
+                // Get full menu item details
+                itemsMap.set(item.menuItem, {
+                  _id: item.menuItem,
+                  name: item.name,
+                  price: item.price
+                });
               }
             });
           }

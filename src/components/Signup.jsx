@@ -59,7 +59,7 @@ export default function Signup() {
         navigate('/customer-dashboard');
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to create account');
+      toast.error(err.message || 'Failed to create account');
     } finally {
       setLoading(false);
     }

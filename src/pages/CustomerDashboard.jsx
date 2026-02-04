@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useFavorites } from '../context/FavoritesContext';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import MenuItemCard from '../components/MenuItemCard';
 import { toast } from 'react-toastify';
 
 const CustomerDashboard = () => {
-  const { favorites, isFavorite } = useFavorites();
+  const { itemFavorites, isFavoriteItem } = useFavorites();
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,13 +23,12 @@ const CustomerDashboard = () => {
   const fetchMenu = async () => {
     try {
       setLoading(true);
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.get(`${apiUrl}/api/menuitems`);
-      setMenuItems(response.data);
+      const items = await dataService.getMenuItems();
+      setMenuItems(items);
       setError(null);
     } catch (err) {
       console.error('Error fetching menu:', err);
-      const errorMsg = err.response?.data?.message || 'Failed to load menu items';
+      const errorMsg = err.message || 'Failed to load menu items';
       setError(errorMsg);
       toast.error(errorMsg);
     } finally {
@@ -59,7 +58,7 @@ const CustomerDashboard = () => {
                            item.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
       const matchesPrice = (item.price >= priceRange[0] && item.price <= priceRange[1]);
-      const matchesFavorite = !showFavorites || isFavorite(item._id);
+      const matchesFavorite = !showFavorites || isFavoriteItem(item._id);
       return matchesSearch && matchesCategory && matchesPrice && matchesFavorite && item.available;
     })
     .sort((a, b) => {
@@ -126,7 +125,7 @@ const CustomerDashboard = () => {
             </div>
             <div>
               <p className="text-orange-200 text-sm font-semibold">Favorites</p>
-              <p className="text-3xl font-black">{favorites.length}</p>
+              <p className="text-3xl font-black">{itemFavorites.length}</p>
             </div>
             <div>
               <p className="text-orange-200 text-sm font-semibold">Avg Rating</p>
@@ -347,18 +346,12 @@ const CustomerDashboard = () => {
                 </span>
               </h3>
             </div>
-            <div className="hidden md:flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Price Range</p>
-                <p className="text-xl font-black text-orange-600">₹{minPrice} - ₹{priceRange[1]}</p>
-              </div>
-            </div>
           </div>
 
           {/* Empty State */}
           {filteredItems.length === 0 ? (
-            <div className="text-center py-24 bg-white rounded-2xl shadow-lg border-2 border-gray-200">
-              <div className="text-8xl mb-6 filter opacity-50">🔍</div>
+            <div className="text-center py-24 bg-white rounded-2xl shadow-lg border-2 border-gray-200 flex flex-col items-center justify-center">
+              <div className="text-8xl mb-6 filter opacity-50">🍽️</div>
               <h3 className="text-4xl font-black text-gray-900 mb-3">No Dishes Match Your Search</h3>
               <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
                 We couldn't find any dishes matching your criteria. Try adjusting your filters or search term to discover more delicious options.
@@ -395,18 +388,6 @@ const CustomerDashboard = () => {
                   <MenuItemCard key={item._id} item={item} viewMode={viewMode} index={index} />
                 ))}
               </div>
-
-              {/* Pagination/Load More Info */}
-              {filteredItems.length > 12 && (
-                <div className="mt-16 text-center">
-                  <p className="text-gray-600 text-lg font-semibold mb-6">
-                    Showing {filteredItems.length} of {menuItems.length} total items
-                  </p>
-                  <button className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-12 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
-                    Load More Items
-                  </button>
-                </div>
-              )}
             </>
           )}
         </div>

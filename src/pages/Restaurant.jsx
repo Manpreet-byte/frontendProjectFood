@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
-
-const apiBase = import.meta.env.VITE_API_URL;
+import React, { useEffect, useState, useMemo } from 'react';
+import { useFavorites } from '../context/FavoritesContext';
+import MenuItemCard from '../components/MenuItemCard';
+import MenuFilterBar from '../components/MenuFilterBar';
+import { useNavigate } from 'react-router-dom';
+import dataService from '../data/dataService';
 
 function isYouTubeUrl(url) {
   return /youtube\.com|youtu\.be/.test(url);
@@ -60,18 +63,26 @@ function Lightbox({ images = [], start = null, onClose }) {
 }
 
 export default function Restaurant() {
+  const { isFavoriteRestaurant, addFavoriteRestaurant, removeFavoriteRestaurant, isFavoriteItem } = useFavorites();
+  const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [mainIndex, setMainIndex] = useState(0);
+  // Menu UI state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortBy, setSortBy] = useState('name-asc');
+  const [maxPrice, setMaxPrice] = useState(null);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const res = await fetch(`${apiBase}/api/restaurants`);
-        const data = await res.json();
-        setRestaurant(data[0] || null);
+        const restaurants = await dataService.getRestaurants();
+        setRestaurant(restaurants[0] || null);
       } catch (err) {
         setError('Unable to load restaurant info');
       } finally {
@@ -80,6 +91,26 @@ export default function Restaurant() {
     };
     fetchRestaurant();
   }, []);
+
+  // derive categories and price range
+  const { allCategories, computedMaxPrice } = useMemo(() => {
+    const cats = new Set();
+    let maxP = 0;
+    if (restaurant && restaurant.sections) {
+      restaurant.sections.forEach((s) => {
+        (s.items || []).forEach((it) => {
+          if (it.category) cats.add(it.category);
+          const price = Number(it.price || it.price === 0 ? it.price : 0);
+          if (price > maxP) maxP = price;
+        });
+      });
+    }
+    return { allCategories: ['All', ...Array.from(cats)], computedMaxPrice: maxP || 500 };
+  }, [restaurant]);
+
+  useEffect(() => {
+    if (computedMaxPrice && maxPrice == null) setMaxPrice(computedMaxPrice);
+  }, [computedMaxPrice]);
 
   if (loading) {
     return (
@@ -114,6 +145,7 @@ export default function Restaurant() {
     );
   }
 
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Banner */}
@@ -132,15 +164,29 @@ export default function Restaurant() {
             </div>
           </div>
         )}
-        
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
 
-        {/* Restaurant Header Info */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-          <div className="container mx-auto">
-            <h1 className="text-5xl font-black mb-2">{restaurant.name}</h1>
-            <p className="text-xl opacity-90 max-w-2xl">{restaurant.description}</p>
+        {/* Restaurant Header Info + Favorite Button */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 text-white flex items-center justify-between">
+          <div className="container mx-auto flex items-center gap-4">
+            <div>
+              <h1 className="text-5xl font-black mb-2">{restaurant.name}</h1>
+              <p className="text-xl opacity-90 max-w-2xl">{restaurant.description}</p>
+            </div>
+            {/* Favorite Button */}
+            <button
+              aria-label={isFavoriteRestaurant(restaurant._id) ? 'Unfavorite restaurant' : 'Favorite restaurant'}
+              onClick={() => {
+                isFavoriteRestaurant(restaurant._id)
+                  ? removeFavoriteRestaurant(restaurant._id)
+                  : addFavoriteRestaurant(restaurant._id);
+              }}
+              className={`ml-6 text-4xl focus:outline-none transition-transform hover:scale-110 ${isFavoriteRestaurant(restaurant._id) ? 'text-red-400' : 'text-white opacity-70 hover:text-red-400'}`}
+              style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}
+            >
+              {isFavoriteRestaurant(restaurant._id) ? '❤️' : '🤍'}
+            </button>
           </div>
         </div>
       </div>
@@ -465,54 +511,70 @@ export default function Restaurant() {
           </div>
         )}
 
-        {/* Menu Sections */}
+        {/* Menu Sections with Filters */}
         <div className="mb-16">
-          <h2 className="text-4xl font-black mb-12 text-gray-900">Our Menu</h2>
+          <h2 className="text-4xl font-black mb-6 text-gray-900">Our Menu</h2>
+
+          <MenuFilterBar
+            categories={allCategories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={(c) => setSelectedCategory(c)}
+            searchTerm={searchTerm}
+            onSearchChange={(s) => setSearchTerm(s)}
+            sortBy={sortBy}
+            onSortChange={(s) => setSortBy(s)}
+            maxPrice={maxPrice}
+            onMaxPriceChange={(p) => setMaxPrice(p)}
+            priceMaxLimit={computedMaxPrice}
+            viewMode={viewMode}
+            onViewChange={(v) => setViewMode(v)}
+            favoritesOnly={favoritesOnly}
+            onFavoritesToggle={() => setFavoritesOnly((s) => !s)}
+            onClear={() => { setSearchTerm(''); setSelectedCategory('All'); setSortBy('name-asc'); setMaxPrice(computedMaxPrice); setViewMode('grid'); setFavoritesOnly(false); }}
+          />
+
           {restaurant.sections && restaurant.sections.length > 0 ? (
-            <div className="space-y-16">
-              {restaurant.sections.map((section) => (
-                <div key={section.title}>
-                  <div className="mb-8">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">{section.title}</h3>
-                    {section.description && (
-                      <p className="text-gray-600 text-lg">{section.description}</p>
-                    )}
-                    <div className="h-1 w-24 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mt-4"></div>
+            <div className="space-y-12">
+              {restaurant.sections.map((section) => {
+                // filter and sort items for this section
+                const items = section.items || [];
+                const filtered = items.filter((it) => {
+                  if (selectedCategory && selectedCategory !== 'All' && it.category !== selectedCategory) return false;
+                  if (typeof maxPrice === 'number' && maxPrice > 0 && Number(it.price || 0) > Number(maxPrice)) return false;
+                  if (favoritesOnly && !isFavoriteItem(it._id)) return false;
+                  const q = searchTerm.trim().toLowerCase();
+                  if (!q) return true;
+                  const haystack = [it.name, it.description, (it.ingredients || []).join(' '), it.cuisine, it.category].filter(Boolean).join(' ').toLowerCase();
+                  return haystack.includes(q);
+                });
+
+                const sorted = filtered.sort((a, b) => {
+                  if (sortBy === 'price-asc') return (Number(a.price || 0) - Number(b.price || 0));
+                  if (sortBy === 'price-desc') return (Number(b.price || 0) - Number(a.price || 0));
+                  // default name-asc
+                  return String(a.name || '').localeCompare(String(b.name || ''));
+                });
+
+                if (sorted.length === 0) return null;
+
+                return (
+                  <div key={section.title}>
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-1">{section.title}</h3>
+                        {section.description && <p className="text-gray-600">{section.description}</p>}
+                      </div>
+                      <div className="text-sm text-gray-500">{sorted.length} items</div>
+                    </div>
+
+                    <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-4'}>
+                      {sorted.map((it, idx) => (
+                        <MenuItemCard key={it._id || `${section.title}-${idx}`} item={it} viewMode={viewMode} index={idx} />
+                      ))}
+                    </div>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {section.items && section.items.length > 0 ? (
-                      section.items.map((it, idx) => (
-                        <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all group transform hover:-translate-y-2">
-                          {it.imageUrl && (
-                            <div className="relative h-48 overflow-hidden bg-gray-200">
-                              <img 
-                                src={it.imageUrl} 
-                                alt={it.name} 
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                              />
-                            </div>
-                          )}
-                          <div className="p-6">
-                            <div className="flex justify-between items-start mb-3">
-                              <h4 className="font-bold text-lg text-gray-900 group-hover:text-orange-600 transition flex-1">{it.name}</h4>
-                              <div className="text-2xl font-black text-orange-600">₹{it.price?.toFixed(0)}</div>
-                            </div>
-                            {it.description && (
-                              <p className="text-sm text-gray-600 mb-4 line-clamp-2">{it.description}</p>
-                            )}
-                            <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold py-2 rounded-lg hover:shadow-lg transition-all transform hover:scale-105">
-                              Add to Order
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="col-span-3 text-center text-gray-500 py-8">No items in this section.</div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center text-gray-500 py-12">No menu sections configured for this restaurant.</div>
@@ -772,9 +834,15 @@ export default function Restaurant() {
           <div className="container mx-auto px-6 text-center">
             <h2 className="text-5xl font-black mb-6">Ready to Order?</h2>
             <p className="text-2xl mb-10 opacity-90">Experience exceptional taste and service today</p>
-            <button className="bg-white text-orange-600 px-12 py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105 shadow-2xl">
-              View Full Menu
-            </button>
+                <button
+                  onClick={() => {
+                    // send users to the menu page (login protected)
+                    navigate('/menu');
+                  }}
+                  className="bg-white text-orange-600 px-12 py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105 shadow-2xl"
+                >
+                  View Full Menu
+                </button>
           </div>
         </div>
       </div>

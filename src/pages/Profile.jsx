@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { toast } from 'react-toastify';
 
 export default function Profile() {
@@ -20,8 +20,6 @@ export default function Profile() {
   const [addresses, setAddresses] = useState([]);
   const [newAddress, setNewAddress] = useState({ label: '', address: '', isDefault: false });
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-
   useEffect(() => {
     if (user) {
       setProfileData({
@@ -37,8 +35,8 @@ export default function Profile() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/orders/user/${user._id || user.uid}`);
-      setOrders(response.data);
+      const userOrders = await dataService.getOrdersByUser(user._id || user.uid);
+      setOrders(userOrders);
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -46,9 +44,10 @@ export default function Profile() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/api/auth/user/${user.uid}`);
-      if (response.data.addresses) {
-        setAddresses(response.data.addresses);
+      // Load addresses from localStorage for frontend-only version
+      const savedAddresses = localStorage.getItem(`addresses_${user._id || user.uid}`);
+      if (savedAddresses) {
+        setAddresses(JSON.parse(savedAddresses));
       }
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -58,11 +57,14 @@ export default function Profile() {
   const handleUpdateProfile = async () => {
     setLoading(true);
     try {
-      await axios.put(`${apiUrl}/api/auth/user/${user.uid}`, {
-        displayName: profileData.displayName,
+      // Save profile to localStorage for frontend-only version
+      const updatedUser = {
+        ...user,
+        name: profileData.displayName,
         phoneNumber: profileData.phoneNumber,
         photoURL: profileData.photoURL
-      });
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       toast.success('Profile updated successfully!');
       setEditMode(false);
     } catch (error) {
@@ -80,7 +82,7 @@ export default function Profile() {
     
     const updatedAddresses = [...addresses, { ...newAddress, id: Date.now() }];
     try {
-      await axios.put(`${apiUrl}/api/auth/user/${user.uid}`, { addresses: updatedAddresses });
+      localStorage.setItem(`addresses_${user._id || user.uid}`, JSON.stringify(updatedAddresses));
       setAddresses(updatedAddresses);
       setNewAddress({ label: '', address: '', isDefault: false });
       toast.success('Address added!');
@@ -92,7 +94,7 @@ export default function Profile() {
   const handleDeleteAddress = async (id) => {
     const updatedAddresses = addresses.filter(addr => addr.id !== id);
     try {
-      await axios.put(`${apiUrl}/api/auth/user/${user.uid}`, { addresses: updatedAddresses });
+      localStorage.setItem(`addresses_${user._id || user.uid}`, JSON.stringify(updatedAddresses));
       setAddresses(updatedAddresses);
       toast.success('Address removed');
     } catch (error) {

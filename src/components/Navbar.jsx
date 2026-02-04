@@ -74,7 +74,7 @@ export default function Navbar() {
               ) : (
                 <>
                   <Link 
-                    to="/customer-dashboard" 
+                    to="/menu" 
                     className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
                   >
                     Menu
@@ -90,6 +90,12 @@ export default function Navbar() {
                     className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
                   >
                     Reviews
+                  </Link>
+                  <Link
+                    to="/favorites"
+                    className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold flex items-center gap-1"
+                  >
+                    <span className="text-lg">❤️</span> Favorites
                   </Link>
                   <Link 
                     to="/checkout" 

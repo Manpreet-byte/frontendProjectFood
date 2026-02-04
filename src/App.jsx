@@ -13,6 +13,7 @@ import Signup from './components/Signup';
 import AuthGoogleSuccess from './pages/AuthGoogleSuccess';
 import Checkout from './pages/Checkout';
 import NotFound from './pages/NotFound';
+import FavoritesPage from './pages/FavoritesPage';
 import Restaurant from './pages/Restaurant';
 import RatingsPage from './pages/RatingsPage';
 import Profile from './pages/Profile';
@@ -36,10 +37,11 @@ function App() {
                 <Navbar />
                 <Routes>
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/customer-dashboard" element={<PrivateRoute><CustomerDashboard /></PrivateRoute>} />
+                  <Route path="/menu" element={<PrivateRoute><CustomerDashboard /></PrivateRoute>} />
                   <Route path="/restaurant" element={<Restaurant />} />
                   <Route path="/rate" element={<RatingsPage />} />
                   <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+                  <Route path="/favorites" element={<PrivateRoute><FavoritesPage /></PrivateRoute>} />
                   <Route path="/help" element={<Help />} />
                   <Route path="/admin-dashboard" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
                   <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />

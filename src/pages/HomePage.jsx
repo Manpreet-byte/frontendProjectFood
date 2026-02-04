@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -35,7 +35,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [ratingStats, setRatingStats] = useState({ average: 0, total: 0 });
+  const [ratingStats, setRatingStats] = useState({ average: 4.5, total: 0 });
 
   useEffect(() => {
     fetchMenuItems();
@@ -44,9 +44,8 @@ export default function HomePage() {
 
   const fetchMenuItems = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.get(`${apiUrl}/api/menuitems`);
-      setMenuItems(response.data.filter(item => item.available));
+      const items = await dataService.getMenuItems();
+      setMenuItems(items.filter(item => item.available));
       setLoading(false);
     } catch (error) {
       console.error('Error fetching menu:', error);
@@ -56,9 +55,8 @@ export default function HomePage() {
 
   const fetchRatings = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.get(`${apiUrl}/api/ratings/average`);
-      setRatingStats(response.data);
+      const stats = await dataService.getRatingStats();
+      setRatingStats(stats);
     } catch (error) {
       console.error('Error fetching ratings:', error);
     }
@@ -184,7 +182,7 @@ export default function HomePage() {
       if (user.isAdmin) {
         navigate('/admin-dashboard');
       } else {
-        navigate('/customer-dashboard');
+        navigate('/menu');
       }
     } else {
       navigate('/login');

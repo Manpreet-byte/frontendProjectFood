@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 export default function AuthGoogleSuccess() {
@@ -16,14 +15,13 @@ export default function AuthGoogleSuccess() {
         if (token) {
           await setUserFromToken(token);
         } else {
-          // try cookie-based session
-          // ask backend for current user (will include cookie if present)
-          const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, { withCredentials: true });
-          const user = res.data.user;
-          // set axios header and localStorage
-          const userWithToken = { ...user, token: null };
-          // If backend used cookie only, we don't have token client-side; but app uses cookie for auth
-          localStorage.setItem('user', JSON.stringify(userWithToken));
+          // For frontend-only version, check localStorage
+          const savedUser = localStorage.getItem('user');
+          if (savedUser) {
+            // User already logged in
+            navigate('/');
+            return;
+          }
         }
         navigate('/');
       } catch (err) {

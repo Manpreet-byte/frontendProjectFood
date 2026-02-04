@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import OrderConfirmationModal from '../components/OrderConfirmationModal';
@@ -280,7 +280,6 @@ export default function Checkout() {
   const [pendingOrderPayload, setPendingOrderPayload] = useState(null);
 
   const total = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   // Handle fake payment success
   const handleFakePaymentSuccess = async (paymentResult) => {
@@ -290,18 +289,19 @@ export default function Checkout() {
       const orderPayload = {
         ...pendingOrderPayload,
         paymentId: paymentResult.paymentId,
-        paymentStatus: 'paid'
+        paymentStatus: 'paid',
+        userId: user?._id
       };
 
-      const response = await axios.post(`${apiUrl}/api/orders`, orderPayload);
+      const order = await dataService.createOrder(orderPayload);
 
-      setConfirmedOrder(response.data);
+      setConfirmedOrder(order);
       setShowModal(true);
       clearCart();
       toast.success('Payment successful! Order placed.');
     } catch (error) {
       console.error('Order error:', error);
-      toast.error(error.response?.data?.message || 'Order placement failed. Try again.');
+      toast.error(error.message || 'Order placement failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -328,8 +328,9 @@ export default function Checkout() {
     setLoading(true);
     try {
       const orderPayload = {
-        items: cart.items.map(({ _id, quantity, price }) => ({ 
+        items: cart.items.map(({ _id, name, quantity, price }) => ({ 
           menuItem: _id, 
+          name,
           quantity,
           price 
         })),
@@ -338,7 +339,9 @@ export default function Checkout() {
         phone: formData.phone,
         email: formData.email,
         paymentMethod: formData.paymentMethod,
-        deliveryTime: formData.deliveryTime
+        deliveryTime: formData.deliveryTime,
+        userId: user?._id,
+        userName: user?.name
       };
 
       // include coordinates when available
@@ -354,17 +357,17 @@ export default function Checkout() {
       }
 
       // Cash on delivery - place order directly
-      const response = await axios.post(`${apiUrl}/api/orders`, orderPayload);
+      const order = await dataService.createOrder(orderPayload);
 
       // Show confirmation modal with order details
-      setConfirmedOrder(response.data);
+      setConfirmedOrder(order);
       setShowModal(true);
       clearCart();
       
       toast.success('Order placed successfully!');
     } catch (error) {
       console.error('Order error:', error);
-      toast.error(error.response?.data?.message || 'Order placement failed. Try again.');
+      toast.error(error.message || 'Order placement failed. Try again.');
     } finally {
       setLoading(false);
     }

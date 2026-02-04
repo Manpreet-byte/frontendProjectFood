@@ -55,7 +55,7 @@ const MenuItemCard = ({ item, viewMode = 'grid', index = 0 }) => {
   const [showModal, setShowModal] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const { isFavoriteItem, addFavoriteItem, removeFavoriteItem } = useFavorites();
 
   const handleCardClick = () => {
     if (!item.available) return;
@@ -64,10 +64,10 @@ const MenuItemCard = ({ item, viewMode = 'grid', index = 0 }) => {
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
-    if (isFavorite(item._id)) {
-      removeFavorite(item._id);
+    if (isFavoriteItem(item._id)) {
+      removeFavoriteItem(item._id);
     } else {
-      addFavorite(item._id);
+      addFavoriteItem(item._id);
     }
   };
 
@@ -170,9 +170,9 @@ const MenuItemCard = ({ item, viewMode = 'grid', index = 0 }) => {
                 </div>
                 <button
                   onClick={handleFavoriteClick}
-                  className={`text-2xl transition-transform hover:scale-125 flex-shrink-0 ${isFavorite(item._id) ? 'animate-heartbeat' : ''}`}
+                  className={`text-2xl transition-transform hover:scale-125 flex-shrink-0 ${isFavoriteItem(item._id) ? 'animate-heartbeat' : ''}`}
                 >
-                  {isFavorite(item._id) ? '❤️' : '🤍'}
+                  {isFavoriteItem(item._id) ? '❤️' : '🤍'}
                 </button>
               </div>
               <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-1 mt-2 pr-4">{item.description}</p>
@@ -281,10 +281,10 @@ const MenuItemCard = ({ item, viewMode = 'grid', index = 0 }) => {
           {/* Favorite Button */}
           <button
             onClick={handleFavoriteClick}
-            className={`absolute top-3 right-3 w-10 h-10 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center text-xl shadow-lg transition-all hover:scale-110 hover:bg-white dark:hover:bg-gray-800 ${isFavorite(item._id) ? 'animate-heartbeat' : ''}`}
-            title={isFavorite(item._id) ? 'Remove from Favorites' : 'Add to Favorites'}
+            className={`absolute top-3 right-3 w-10 h-10 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center text-xl shadow-lg transition-all hover:scale-110 hover:bg-white dark:hover:bg-gray-800 ${isFavoriteItem(item._id) ? 'animate-heartbeat' : ''}`}
+            title={isFavoriteItem(item._id) ? 'Remove from Favorites' : 'Add to Favorites'}
           >
-            {isFavorite(item._id) ? '❤️' : '🤍'}
+            {isFavoriteItem(item._id) ? '❤️' : '🤍'}
           </button>
 
           {/* Category tag */}

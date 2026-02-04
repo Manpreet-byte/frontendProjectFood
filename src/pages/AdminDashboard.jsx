@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
@@ -16,15 +16,13 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-
-      const [ordersRes, menuRes] = await Promise.all([
-        axios.get(`${apiUrl}/api/orders`),
-        axios.get(`${apiUrl}/api/menuitems`)
+      const [ordersData, menuData] = await Promise.all([
+        dataService.getOrders(),
+        dataService.getMenuItems()
       ]);
 
-      setOrders(ordersRes.data);
-      setMenuItems(menuRes.data);
+      setOrders(ordersData);
+      setMenuItems(menuData);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load dashboard data');
@@ -35,11 +33,7 @@ export default function AdminDashboard() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.put(
-        `${apiUrl}/api/orders/${orderId}`,
-        { status: newStatus }
-      );
+      await dataService.updateOrderStatus(orderId, newStatus);
 
       setOrders(orders.map(order =>
         order._id === orderId ? { ...order, status: newStatus } : order
@@ -53,11 +47,7 @@ export default function AdminDashboard() {
 
   const toggleMenuAvailability = async (itemId, currentStatus) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.put(
-        `${apiUrl}/api/menuitems/${itemId}`,
-        { available: !currentStatus }
-      );
+      await dataService.updateMenuItem(itemId, { available: !currentStatus });
 
       setMenuItems(menuItems.map(item =>
         item._id === itemId ? { ...item, available: !currentStatus } : item
@@ -73,8 +63,7 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this item?')) return;
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await axios.delete(`${apiUrl}/api/menuitems/${itemId}`);
+      await dataService.deleteMenuItem(itemId);
 
       setMenuItems(menuItems.filter(item => item._id !== itemId));
       toast.success('Menu item deleted');

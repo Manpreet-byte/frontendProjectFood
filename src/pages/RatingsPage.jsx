@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 
@@ -19,9 +19,9 @@ export default function RatingsPage() {
 
   const fetchRatings = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/ratings`);
-      setAllRatings(res.data.ratings);
-      setStats(res.data.stats);
+      const { ratings, stats: ratingStats } = await dataService.getRatings();
+      setAllRatings(ratings || []);
+      setStats(ratingStats || { average: 4.5, total: 0 });
     } catch (err) {
       console.error('Error fetching ratings:', err);
     }
@@ -41,11 +41,12 @@ export default function RatingsPage() {
 
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/ratings`, {
+      await dataService.createRating({
         rating,
         comment,
-        userName: user.name,
-        userEmail: user.email,
+        userName: user.name || user.displayName || 'Anonymous',
+        userEmail: user.email || 'unknown@local',
+        userId: user._id || user.uid || null,
       });
       toast.success('Thank you for your rating!');
       setRating(0);
@@ -65,11 +66,11 @@ export default function RatingsPage() {
     }
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/ratings/${ratingId}`);
+      await dataService.deleteRating(ratingId);
       toast.success('Rating deleted successfully');
       fetchRatings();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete rating');
+      toast.error(err.message || 'Failed to delete rating');
       console.error(err);
     }
   };

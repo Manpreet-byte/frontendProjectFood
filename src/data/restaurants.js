@@ -1,0 +1,237 @@
+// Static restaurant data - converted from backend seed.js
+export const restaurants = [
+  {
+    _id: 'rest_001',
+    name: 'Pizza Palace',
+    description: 'Authentic Italian pizzas with fresh ingredients and traditional recipes',
+    longDescription: 'At Pizza Palace, we believe that great pizza starts with quality ingredients. Our dough is made fresh daily using imported Italian flour, and our tomatoes are sourced directly from San Marzano. Every pizza is hand-crafted by our skilled pizzaiolos who have trained in Naples, ensuring an authentic Italian experience with every bite.',
+    history: 'Pizza Palace was founded in 2010 by Chef Marco Romano, who brought his family\'s 100-year-old recipes from Naples, Italy. What started as a small family pizzeria has grown into one of the city\'s most beloved dining destinations. Our commitment to authenticity and quality has earned us numerous awards and a loyal following of pizza enthusiasts.',
+    foundedYear: 2010,
+    founderName: 'Chef Marco Romano',
+    address: '123 Main Street, City Center, Bangalore 560001',
+    location: {
+      type: 'Point',
+      coordinates: [77.5946, 12.9716]
+    },
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1579751626657-72bc17010498?w=1200',
+    logo: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800',
+      'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800',
+      'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800',
+      'https://images.unsplash.com/photo-1579751626657-72bc17010498?w=800',
+      'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800'
+    ],
+    rating: 4.5,
+    numReviews: 1250,
+    deliveryTime: '30-40 mins',
+    minOrder: 299,
+    deliveryFee: 40,
+    cuisineType: ['Italian', 'Pizza', 'Pasta'],
+    specialties: ['Wood-fired Pizza', 'Fresh Pasta', 'Tiramisu', 'Calzones', 'Garlic Bread'],
+    features: ['Dine-in', 'Takeaway', 'Delivery', 'Outdoor Seating', 'Family Friendly'],
+    phone: '+91 98765 43210',
+    email: 'order@pizzapalace.com',
+    website: 'www.pizzapalace.com',
+    hours: '11:00 AM - 11:00 PM',
+    socialMedia: {
+      facebook: 'https://facebook.com/pizzapalace',
+      instagram: 'https://instagram.com/pizzapalace',
+      twitter: 'https://twitter.com/pizzapalace'
+    },
+    awards: [
+      { title: 'Best Pizza in Town', year: 2023, organization: 'Food Critics Association' },
+      { title: 'Excellence in Italian Cuisine', year: 2022, organization: 'Culinary Awards' }
+    ],
+    certifications: ['FSSAI Certified', 'ISO 22000', 'Halal Certified'],
+    isActive: true,
+    isFeatured: true
+  },
+  {
+    _id: 'rest_002',
+    name: 'Burger Hub',
+    description: 'Juicy gourmet burgers and crispy fries made with premium ingredients',
+    longDescription: 'Burger Hub is your ultimate destination for gourmet burgers crafted with passion. We source our beef from local farms, grind it fresh daily, and cook each patty to perfection. Our secret sauce recipe has been perfected over years, creating a flavor that keeps our customers coming back for more.',
+    history: 'Founded in 2015 by food enthusiast David Smith after his travels across America inspired him to bring authentic American diner culture to India. Starting with just 5 burger varieties, we now offer over 20 unique creations. Our "Double Stack Challenge" has become legendary among burger lovers.',
+    foundedYear: 2015,
+    founderName: 'David Smith',
+    address: '456 Park Avenue, Downtown, Bangalore 560002',
+    location: {
+      type: 'Point',
+      coordinates: [77.6033, 12.9698]
+    },
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=1200',
+    logo: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800',
+      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800',
+      'https://images.unsplash.com/photo-1550547660-d9450f859349?w=800',
+      'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=800',
+      'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800'
+    ],
+    rating: 4.3,
+    numReviews: 890,
+    deliveryTime: '25-35 mins',
+    minOrder: 199,
+    deliveryFee: 30,
+    cuisineType: ['American', 'Fast Food', 'Burgers'],
+    specialties: ['Gourmet Burgers', 'Loaded Fries', 'Milkshakes', 'Onion Rings', 'Chicken Wings'],
+    features: ['Dine-in', 'Takeaway', 'Delivery', 'Late Night Service'],
+    phone: '+91 98765 43211',
+    email: 'order@burgerhub.com',
+    hours: '11:00 AM - 1:00 AM',
+    isActive: true,
+    isFeatured: true
+  },
+  {
+    _id: 'rest_003',
+    name: 'Pasta Paradise',
+    description: 'Fresh homemade pasta dishes inspired by Italian grandmothers',
+    longDescription: 'Every strand of pasta at Pasta Paradise is made with love, just like Italian nonnas have done for generations. We import semolina flour from Italy and prepare our pasta fresh every morning. Our sauces simmer for hours to develop deep, complex flavors that transport you straight to the heart of Italy.',
+    history: 'Pasta Paradise began in 2012 when Chef Isabella returned from her culinary training in Bologna, Italy. Armed with authentic recipes passed down through four generations of her Italian mentors family, she set out to bring genuine Italian pasta to India. Today, we serve over 500 satisfied customers daily.',
+    foundedYear: 2012,
+    founderName: 'Chef Isabella Martinez',
+    address: '789 Food Street, Little Italy, Bangalore 560003',
+    location: {
+      type: 'Point',
+      coordinates: [77.5912, 12.9634]
+    },
+    image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=1200',
+    logo: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=800',
+      'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800',
+      'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800',
+      'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800',
+      'https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=800'
+    ],
+    rating: 4.7,
+    numReviews: 1560,
+    deliveryTime: '35-45 mins',
+    minOrder: 349,
+    deliveryFee: 50,
+    cuisineType: ['Italian', 'Pasta', 'Mediterranean'],
+    specialties: ['Fresh Pasta', 'Risotto', 'Lasagna', 'Ravioli', 'Gnocchi'],
+    features: ['Dine-in', 'Romantic Ambiance', 'Wine Selection', 'Private Dining'],
+    phone: '+91 98765 43212',
+    email: 'reservations@pastaparadise.com',
+    hours: '12:00 PM - 10:30 PM',
+    isActive: true
+  },
+  {
+    _id: 'rest_004',
+    name: 'Dessert Dreams',
+    description: 'Heavenly cakes, artisan pastries, and creamy ice creams',
+    longDescription: 'Dessert Dreams is where sweet fantasies come true. Our pastry chefs create edible art using premium Belgian chocolate, fresh seasonal fruits, and house-made creams. Every dessert tells a story of craftsmanship and passion, from our signature layered cakes to our delicate French macarons.',
+    history: 'What started as a small home bakery in 2014 by sisters Maya and Priya has blossomed into the citys favorite dessert destination. Their mothers recipes, combined with French patisserie training, created a unique fusion that has won hearts (and taste buds) across the city. Our chocolate lava cake alone sells over 200 pieces daily!',
+    foundedYear: 2014,
+    founderName: 'Maya & Priya Sisters',
+    address: '321 Sweet Lane, Sugar Town, Bangalore 560004',
+    location: {
+      type: 'Point',
+      coordinates: [77.5880, 12.9800]
+    },
+    image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1517433670267-30f41c098e5c?w=1200',
+    logo: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1517433670267-30f41c098e5c?w=800',
+      'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800',
+      'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800',
+      'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=800',
+      'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800',
+      'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800'
+    ],
+    rating: 4.8,
+    numReviews: 2100,
+    deliveryTime: '20-30 mins',
+    minOrder: 249,
+    deliveryFee: 35,
+    cuisineType: ['Desserts', 'Bakery', 'Ice Cream', 'Cafe'],
+    specialties: ['Chocolate Lava Cake', 'French Macarons', 'Artisan Gelato', 'Custom Cakes', 'Cheesecakes'],
+    features: ['Dine-in', 'Custom Orders', 'Party Catering', 'Eggless Options'],
+    phone: '+91 98765 43213',
+    email: 'sweet@dessertdreams.com',
+    hours: '10:00 AM - 11:00 PM',
+    isActive: true,
+    isFeatured: true
+  },
+  {
+    _id: 'rest_005',
+    name: 'Spice Garden',
+    description: 'Authentic Indian cuisine with rich aromatic flavors from across the subcontinent',
+    longDescription: 'Spice Garden celebrates the incredible diversity of Indian cuisine. Our chefs, each specializing in a different regional cuisine, work together to bring you the best of North Indian curries, South Indian dosas, Mughlai biryanis, and street food favorites. We grind our own spices fresh daily for maximum flavor.',
+    history: 'Chef Rajesh Kumar founded Spice Garden in 2011 after spending 15 years traveling across India documenting traditional recipes. His mission was simple: preserve authentic Indian flavors in a modern setting. Today, Spice Garden hosts cooking classes, spice workshops, and has trained over 50 chefs who now run their own kitchens.',
+    foundedYear: 2011,
+    founderName: 'Chef Rajesh Kumar',
+    address: '555 Curry Lane, Spice District, Bangalore 560005',
+    location: {
+      type: 'Point',
+      coordinates: [77.5950, 12.9750]
+    },
+    image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200',
+    logo: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+      'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800',
+      'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800',
+      'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800',
+      'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800'
+    ],
+    rating: 4.6,
+    numReviews: 1850,
+    deliveryTime: '35-45 mins',
+    minOrder: 299,
+    deliveryFee: 45,
+    cuisineType: ['Indian', 'North Indian', 'South Indian', 'Mughlai'],
+    specialties: ['Butter Chicken', 'Hyderabadi Biryani', 'Tandoori Platter', 'Dal Makhani', 'Masala Dosa'],
+    features: ['Dine-in', 'Live Kitchen', 'Thali Specials', 'Catering Services'],
+    phone: '+91 98765 43214',
+    email: 'order@spicegarden.com',
+    hours: '11:00 AM - 11:00 PM',
+    isActive: true
+  },
+  {
+    _id: 'rest_006',
+    name: 'Fresh Juice Bar',
+    description: 'Fresh cold-pressed juices, smoothies, and healthy wellness drinks',
+    longDescription: 'At Fresh Juice Bar, we believe in the power of nature. Every drink is made to order using 100% organic fruits and vegetables sourced from local farms. Our cold-press technology preserves maximum nutrients, ensuring you get the healthiest, freshest drinks possible. No added sugar, no preservatives, just pure goodness.',
+    history: 'Fresh Juice Bar was born in 2018 from fitness enthusiast and nutritionist Ananya Sharmas passion for healthy living. After struggling to find genuinely healthy drinks in the city, she decided to create her own. Starting with a small cart outside a gym, the brand has grown to 5 locations, serving health-conscious customers their daily dose of vitamins.',
+    foundedYear: 2018,
+    founderName: 'Ananya Sharma',
+    address: '888 Health Street, Green Zone, Bangalore 560006',
+    location: {
+      type: 'Point',
+      coordinates: [77.5920, 12.9680]
+    },
+    image: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=400',
+    coverImage: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=1200',
+    logo: 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=200',
+    gallery: [
+      'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=800',
+      'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=800',
+      'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=800',
+      'https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800',
+      'https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=800'
+    ],
+    rating: 4.4,
+    numReviews: 720,
+    deliveryTime: '15-25 mins',
+    minOrder: 149,
+    deliveryFee: 25,
+    cuisineType: ['Beverages', 'Healthy', 'Juices', 'Smoothies'],
+    specialties: ['Cold-pressed Juices', 'Acai Bowls', 'Protein Smoothies', 'Detox Drinks', 'Immunity Boosters'],
+    features: ['Quick Service', 'Organic Ingredients', 'Customizable Drinks', 'Subscription Plans'],
+    phone: '+91 98765 43215',
+    email: 'fresh@juicebar.com',
+    hours: '7:00 AM - 9:00 PM',
+    isActive: true
+  }
+];
+
+export default restaurants;

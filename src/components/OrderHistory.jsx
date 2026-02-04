@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import dataService from '../data/dataService';
 import { useAuth } from '../context/AuthContext';
 
 // Helper function to format time ago
@@ -44,17 +44,22 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    axios.get(`${apiUrl}/api/orders/my-orders`)
-      .then(res => {
-        setOrders(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
+    const fetchOrders = async () => {
+      try {
+        const userOrders = await dataService.getOrdersByUser(user?._id);
+        setOrders(userOrders);
+      } catch (err) {
         console.error(err);
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+    if (user) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   if (loading) {
     return <div className="p-8 text-center">Loading orders...</div>;

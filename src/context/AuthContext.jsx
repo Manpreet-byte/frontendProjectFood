@@ -1,20 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+import dataService from '../data/dataService';
 
 const AuthContext = createContext();
-
-const getApiUrl = () => import.meta.env.VITE_API_URL;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
-      const parsedUser = JSON.parse(userData);
-      if (parsedUser.token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${parsedUser.token}`;
-      }
-      axios.defaults.withCredentials = true;
-      return parsedUser;
+      return JSON.parse(userData);
     }
     return null;
   });
@@ -23,43 +16,50 @@ export const AuthProvider = ({ children }) => {
     const userWithToken = { ...userData, token };
     setUser(userWithToken);
     localStorage.setItem('user', JSON.stringify(userWithToken));
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    axios.defaults.withCredentials = true;
     return userWithToken;
   };
 
   const login = async (email, password) => {
-    const res = await axios.post(`${getApiUrl()}/api/auth/login`, { email, password });
-    const { token, user: userData } = res.data;
-    return persistUser(token, userData);
+    try {
+      const { token, user: userData } = await dataService.login(email, password);
+      return persistUser(token, userData);
+    } catch (error) {
+      throw new Error(error.message || 'Login failed');
+    }
   };
 
   const loginWithFirebaseIdToken = async (idToken) => {
-    const res = await axios.post(`${getApiUrl()}/api/auth/firebase`, { idToken });
-    const { token, user: userData } = res.data;
+    // For frontend-only, simulate Firebase login
+    const userData = {
+      _id: 'firebase_' + Date.now(),
+      name: 'Firebase User',
+      email: 'firebase@user.com',
+      isAdmin: false
+    };
+    const token = 'firebase_token_' + Date.now();
     return persistUser(token, userData);
   };
 
   const setUserFromToken = async (token) => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.defaults.withCredentials = true;
-      const res = await axios.get(`${getApiUrl()}/api/auth/me`);
-      const userData = res.data.user;
-      persistUser(token, userData);
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      setUser(parsed);
     }
   };
 
   const signup = async (name, email, password) => {
-    const res = await axios.post(`${getApiUrl()}/api/auth/signup`, { name, email, password });
-    const { token, user: userData } = res.data;
-    return persistUser(token, userData);
+    try {
+      const { token, user: userData } = await dataService.signup(name, email, password);
+      return persistUser(token, userData);
+    } catch (error) {
+      throw new Error(error.message || 'Signup failed');
+    }
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    delete axios.defaults.headers.common['Authorization'];
   };
 
   return (
