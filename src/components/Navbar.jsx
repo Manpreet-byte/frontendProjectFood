@@ -83,7 +83,7 @@ export default function Navbar() {
                     to="/restaurant"
                     className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
                   >
-                    Restaurants
+                    Restaurant
                   </Link>
                   <Link
                     to="/rate"
@@ -228,7 +228,7 @@ export default function Navbar() {
                 to="/restaurant"
                 className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
               >
-                Restaurants
+                Restaurant
               </Link>
               <Link
                 to="/rate"
@@ -347,7 +347,7 @@ export default function Navbar() {
                       className="block text-gray-700 dark:text-gray-200 hover:text-orange-600 font-semibold py-2"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      🏪 Restaurants
+                      🏪 Restaurant
                     </Link>
                     <Link
                       to="/rate"
@@ -355,12 +355,12 @@ export default function Navbar() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       ⭐ Reviews
-                    </Link>
-                    <Link 
-                      to="/checkout" 
-                      className="block text-gray-700 dark:text-gray-200 hover:text-orange-600 font-semibold py-2 relative"
-                      onClick={() => setIsMenuOpen(false)}
+                    <Link
+                      to="/restaurant"
+                      className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
                     >
+                      Restaurant
+                    </Link>
                       🛒 Cart {cartItemCount > 0 && `(${cartItemCount})`}
                     </Link>
                     <Link 
@@ -389,7 +389,7 @@ export default function Navbar() {
                   className="block text-gray-700 dark:text-gray-200 hover:text-orange-600 font-semibold py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  🏪 Restaurants
+                  🏪 Restaurant
                 </Link>
                 <Link
                   to="/rate"

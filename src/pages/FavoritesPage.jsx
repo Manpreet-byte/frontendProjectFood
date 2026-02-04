@@ -5,19 +5,16 @@ import MenuItemCard from '../components/MenuItemCard';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function FavoritesPage() {
-  const { itemFavorites, restaurantFavorites } = useFavorites();
+  const { itemFavorites } = useFavorites();
   const [favMenuItems, setFavMenuItems] = useState([]);
-  const [favRestaurants, setFavRestaurants] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const allItems = await dataService.getMenuItems();
-      const allRestaurants = await dataService.getRestaurants();
       setFavMenuItems(allItems.filter(item => itemFavorites.includes(item._id)));
-      setFavRestaurants(allRestaurants.filter(r => restaurantFavorites.includes(r._id)));
     }
     fetchData();
-  }, [itemFavorites, restaurantFavorites]);
+  }, [itemFavorites]);
 
   // Animation variants
   const cardVariants = {
@@ -57,46 +54,7 @@ export default function FavoritesPage() {
       <h1 className="text-4xl font-black mb-8 text-orange-600 flex items-center gap-3 relative z-10">
         <span className="text-3xl animate-bounce">❤️</span> Your Favorites
       </h1>
-      <div className="mb-12 relative z-10">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-          <span className="bg-gradient-to-r from-orange-400 to-red-400 text-white px-3 py-1 rounded-full text-lg font-black shadow animate-pulse">🏆</span>
-          Favorite Restaurants
-        </h2>
-        <AnimatePresence>
-        {favRestaurants.length === 0 ? (
-          <motion.div className="flex flex-col items-center justify-center py-16"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-          >
-            <span className="text-6xl mb-4 animate-bounce">😔</span>
-            <p className="text-gray-500 text-lg font-semibold mb-2">No favorite restaurants yet.</p>
-            <p className="text-gray-400">Explore and add some amazing places!</p>
-          </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {favRestaurants.map((r, i) => (
-              <motion.div
-                key={r._id}
-                className="bg-white rounded-2xl shadow-md p-6 flex flex-col items-center relative border-2 border-orange-100 hover:border-orange-400 transition group"
-                custom={i}
-                initial="hidden"
-                animate="visible"
-                variants={cardVariants}
-                whileHover={{ scale: 1.04, boxShadow: '0 8px 32px 0 rgba(255, 107, 107, 0.15)' }}
-              >
-                <span className="absolute top-3 left-3 bg-gradient-to-r from-orange-400 to-red-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow animate-pulse group-hover:scale-110 transition-transform">FAV</span>
-                <img src={r.coverImage || r.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400'} alt={r.name} className="w-full h-40 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300" />
-                <h3 className="text-xl font-bold mb-2 text-orange-700 flex items-center gap-2">{r.name} <span className="text-yellow-400 text-lg">⭐</span></h3>
-                <p className="text-gray-600 mb-2 line-clamp-2">{r.description}</p>
-                <div className="text-sm text-gray-500 mb-2">{r.address}</div>
-                <div className="flex gap-2 text-yellow-500 mb-2">{'⭐'.repeat(Math.round(r.rating || 4.5))}</div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-        </AnimatePresence>
-      </div>
+      {/* Favorite Restaurants removed: only showing favorite menu items now */}
       <div className="relative z-10">
         <h2 className="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
           <span className="bg-gradient-to-r from-orange-400 to-red-400 text-white px-3 py-1 rounded-full text-lg font-black shadow animate-pulse">💖</span>

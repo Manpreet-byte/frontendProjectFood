@@ -97,10 +97,10 @@ export default function Login() {
           </div>
           
           {/* Stats */}
-          <div className="mt-12 grid grid-cols-3 gap-8 text-center">
+            <div className="mt-12 grid grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-3xl font-bold">500+</div>
-              <div className="text-white/80 text-sm">Restaurants</div>
+              <div className="text-white/80 text-sm">Restaurant</div>
             </div>
             <div>
               <div className="text-3xl font-bold">10K+</div>

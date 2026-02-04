@@ -70,7 +70,8 @@ export const restaurants = [
       'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800',
       'https://images.unsplash.com/photo-1550547660-d9450f859349?w=800',
       'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=800',
-      'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800'
+      'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800',
+      'https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=800'
     ],
     rating: 4.3,
     numReviews: 890,
@@ -107,7 +108,8 @@ export const restaurants = [
       'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800',
       'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800',
       'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800',
-      'https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=800'
+      'https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=800',
+      'https://images.unsplash.com/photo-1544025162-d76694265947?w=800'
     ],
     rating: 4.7,
     numReviews: 1560,
@@ -181,7 +183,8 @@ export const restaurants = [
       'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800',
       'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800',
       'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800',
-      'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800'
+      'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800',
+      'https://images.unsplash.com/photo-1496412705862-e0088f16f791?w=800'
     ],
     rating: 4.6,
     numReviews: 1850,
@@ -217,7 +220,8 @@ export const restaurants = [
       'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=800',
       'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=800',
       'https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800',
-      'https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=800'
+      'https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=800',
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800'
     ],
     rating: 4.4,
     numReviews: 720,

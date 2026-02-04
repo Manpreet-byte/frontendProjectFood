@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { useFavorites } from '../context/FavoritesContext';
 import MenuItemCard from '../components/MenuItemCard';
 import MenuFilterBar from '../components/MenuFilterBar';
@@ -150,6 +151,17 @@ export default function Restaurant() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Banner */}
       <div className="relative h-96 overflow-hidden group">
+        {/* Floating decorative emojis to add motion and personality */}
+        <motion.div
+          className="absolute top-6 right-6 z-20 flex flex-col items-end gap-2 text-3xl pointer-events-none"
+          initial={{ x: 0 }}
+          animate={{ x: [0, -18, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+        >
+          <span className="drop-shadow-lg">🍕</span>
+          <span className="drop-shadow-lg">🍔</span>
+          <span className="drop-shadow-lg">🍰</span>
+        </motion.div>
         {restaurant.coverImage ? (
           <img 
             src={restaurant.coverImage} 
