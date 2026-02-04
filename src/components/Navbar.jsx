@@ -93,9 +93,9 @@ export default function Navbar() {
                   </Link>
                   <Link
                     to="/favorites"
-                    className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold flex items-center gap-1"
+                    className="text-gray-700 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 transition font-semibold"
                   >
-                    <span className="text-lg">❤️</span> Favorites
+                    Favorites
                   </Link>
                   <Link 
                     to="/checkout" 
